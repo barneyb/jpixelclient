@@ -33,7 +33,7 @@ String.
 
 ## Scene Layer
 
-The next layer is a port of the pixel server's domain model to Java objects, and
+The next layer is a port of the pixel server's viewer model to Java, including
 Jackson 2 bindings to allow building scenes in memory. Prepare a `Scene` and
 send it over:
 
@@ -50,3 +50,6 @@ send it over:
 
 This is the layer you probably want. Behind the scenes, the object tree will be
 serialized to JSON and passed to the raw layer described above.
+
+Note that this is based of the _viewer_, not the _server_, and thus disallows
+elements with both a command and a region (coords).
