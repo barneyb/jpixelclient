@@ -1,6 +1,7 @@
 package com.barneyb.jpixelclient.json;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -46,14 +47,19 @@ public class JsonView {
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
             conn.connect();
-            try (OutputStream o = conn.getOutputStream()){
+            try (OutputStream o = conn.getOutputStream()) {
                 work.accept(new BufferedWriter(new OutputStreamWriter(o)));
             }
             //noinspection ResultOfMethodCallIgnored
             conn.getInputStream().read(); // have to read something
             conn.disconnect();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (ConnectException ce) {
+            throw new RuntimeException(String.format(
+                    "Couldn't connect to pixel server at %s",
+                    url
+            ), ce);
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
         }
     }
 
