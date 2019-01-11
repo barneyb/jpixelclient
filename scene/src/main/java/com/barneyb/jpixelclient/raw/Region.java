@@ -13,29 +13,29 @@ public class Region {
     }
 
     public static Region rect(int x, int y, int w, int h) {
-        return new Region(x, y, w, h);
+        return new Region(x, y, x + w, y + h);
     }
 
     @JsonValue
     private final int[] coords;
 
-    public Region(int x, int y, int w, int h) {
-        coords = new int[] { x, y, w, h };
+    public Region(int x1, int y1, int x2, int y2) {
+        coords = new int[] { x1, y1, x2, y2 };
     }
 
-    public int getX() {
+    public int getX1() {
         return coords[0];
     }
 
-    public int getY() {
+    public int getY1() {
         return coords[1];
     }
 
-    public int getW() {
+    public int getX2() {
         return coords[2];
     }
 
-    public int getH() {
+    public int getY2() {
         return coords[3];
     }
 
