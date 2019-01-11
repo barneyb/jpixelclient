@@ -16,6 +16,11 @@ public class Scene {
         this.frames = new LinkedList<>();
     }
 
+    public Scene(Frame base) {
+        this();
+        setBase(base);
+    }
+
     public Frame getBase() {
         return base;
     }
