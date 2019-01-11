@@ -9,9 +9,9 @@ layers have an `XxxView` type with three constructors:
 1.  `XxxView(String,int)` connects to the host and port specified
 1.  `XxxView(URL)` connects to the `URL` specified.
 
-Regardless of how a viewer is constructed, they all behave the same: a `view`
-method which accepts the scene you want to view in a specific format, and sends
-it over to the pixel server.
+Regardless of how a viewer is constructed, or what layer it comes from, they all
+behave about the same: a `view` method which accepts the scene you want to view
+in a specific format, and sends it over to the pixel server.
 
 ## Raw JSON Layer
 
@@ -25,9 +25,11 @@ the pixel server:
     ).replace('\'', '"'));
 
 It's very unlikely you want this layer; it's intended purpose is to take care of
-the network underthings for the higher-level layer below. Using a `String` here
-is undesireable for various reasons, and a streaming variant will become
-available at some point.
+the network underthings for the higher-level layer below.
+
+In addition to the `view(String)` method, `stream(Consumer<Writer>)` is also
+provided if you wish to dodge the cost of building a potentially-large throwaway
+String.
 
 ## Scene Layer
 

@@ -1,12 +1,11 @@
 package com.barneyb.jpixelclient.json;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.util.function.Consumer;
 
 /**
  * @author bboisvert
@@ -32,16 +31,27 @@ public class JsonView {
     }
 
     public void view(String json) {
+        stream(out -> {
+            try {
+                out.write(json);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public void stream(Consumer<Writer> work) {
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
-            byte[] bytes = json.getBytes();
-            conn.setFixedLengthStreamingMode(bytes.length);
             conn.connect();
             try (OutputStream o = conn.getOutputStream()){
-                o.write(bytes);
+                work.accept(new BufferedWriter(new OutputStreamWriter(o)));
             }
+            //noinspection ResultOfMethodCallIgnored
+            conn.getInputStream().read(); // have to read something
+            conn.disconnect();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

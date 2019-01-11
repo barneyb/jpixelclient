@@ -3,9 +3,9 @@ package com.barneyb.jpixelclient.raw;
 import com.barneyb.jpixelclient.json.JsonView;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -28,18 +28,18 @@ public class SceneView {
     }
 
     public void view(Scene scene) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
-            mapper.setVisibility(mapper.getSerializationConfig().getDefaultVisibilityChecker()
-                    .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE)
-                    .withGetterVisibility(JsonAutoDetect.Visibility.NONE));
-            jsonView.view(
-                    mapper.writeValueAsString(scene)
-            );
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
+        mapper.setVisibility(mapper.getSerializationConfig().getDefaultVisibilityChecker()
+                .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE)
+                .withGetterVisibility(JsonAutoDetect.Visibility.NONE));
+        jsonView.stream(out -> {
+            try {
+                mapper.writeValue(out, scene);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public static void main(String[] args) {
