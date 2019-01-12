@@ -42,6 +42,10 @@ public class JsonView {
     }
 
     public void stream(Consumer<Writer> work) {
+        stream(work, true);
+    }
+
+    public void stream(Consumer<Writer> work, boolean disconnect) {
         try {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -52,7 +56,7 @@ public class JsonView {
             }
             //noinspection ResultOfMethodCallIgnored
             conn.getInputStream().read(); // have to read something
-            conn.disconnect();
+            if (disconnect) conn.disconnect();
         } catch (ConnectException ce) {
             throw new RuntimeException(String.format(
                     "Couldn't connect to pixel server at %s",

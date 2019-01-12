@@ -2,10 +2,11 @@ package com.barneyb.jpixelclient.raw;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Scene {
+public class Scene implements Iterable<Frame> {
 
     @JsonProperty("b")
     private Frame base;
@@ -37,4 +38,8 @@ public class Scene {
         frames.add(f);
     }
 
+    @Override
+    public Iterator<Frame> iterator() {
+        return frames.iterator();
+    }
 }

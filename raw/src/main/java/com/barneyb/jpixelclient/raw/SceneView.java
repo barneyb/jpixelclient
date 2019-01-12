@@ -14,32 +14,57 @@ import java.net.URL;
 public class SceneView {
 
     private final JsonView jsonView;
+    private final ObjectMapper mapper;
 
     public SceneView() {
         jsonView = new JsonView();
+        mapper = buildMapper();
     }
 
     public SceneView(String host, int port) {
         jsonView = new JsonView(host, port);
+        mapper = buildMapper();
     }
 
     public SceneView(URL url) {
         jsonView = new JsonView(url);
+        mapper = buildMapper();
     }
 
-    public void view(Scene scene) {
+    private ObjectMapper buildMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
         mapper.setVisibility(mapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE)
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE));
+        return mapper;
+    }
+
+    public void view(Scene scene) {
+        view(scene, true);
+    }
+
+    private void view(Scene scene, boolean disconnect) {
         jsonView.stream(out -> {
             try {
                 mapper.writeValue(out, scene);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        });
+        }, disconnect);
+    }
+
+    public void animate(Scene scene) {
+        for (Frame f : scene) {
+            Scene s = new Scene(scene.getBase());
+            s.addFrame(f);
+            view(s, false);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public static void main(String[] args) {
