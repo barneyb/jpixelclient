@@ -37,4 +37,12 @@ public class Frame {
         elements.add(e);
     }
 
+    public void addRegion(Region r) {
+        addElement(new Element(r));
+    }
+
+    public void addCommand(Command c) {
+        addElement(new Element(c));
+    }
+
 }
