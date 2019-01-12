@@ -2,6 +2,8 @@ package com.barneyb.jpixelclient.raw;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.awt.*;
+
 public class Region {
 
     public static Region circle(int x, int y, int r) {
@@ -14,6 +16,10 @@ public class Region {
 
     public static Region rect(int x, int y, int w, int h) {
         return new Region(x, y, x + w, y + h);
+    }
+
+    public static Region rect(Rectangle r) {
+        return new Region(r.x, r.y, r.x + r.width, r.y + r.height);
     }
 
     @JsonValue
