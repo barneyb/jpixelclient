@@ -55,12 +55,16 @@ public class SceneView {
     }
 
     public void animate(Scene scene) {
+        animate(scene, 100);
+    }
+
+    public void animate(Scene scene, int msPerFrame) {
         for (Frame f : scene) {
             Scene s = new Scene(scene.getBase());
             s.addFrame(f);
             view(s, false);
             try {
-                Thread.sleep(100);
+                Thread.sleep(msPerFrame);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
