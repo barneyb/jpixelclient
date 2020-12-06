@@ -1,9 +1,24 @@
 # jpixelclient
 Java bindings for http://github.com/frankamp/go-pixel-server in multiple layers.
 
-In order to use it, you'll need a binary of the pixel server for your platform.
-Start it up, and you can then use these bindings to throw scenes at it. All the
-layers have an `XxxView` type with three constructors:
+You'll need Maven and a JDK to build, a JRE to run. Of course. I've used Maven
+3.3 and 3.6 along with JDK 1.8 and 11. Others will probably work. To start:
+
+    git clone git@github.com:barneyb/jpixelclient.git
+    cd jpixelclient
+    mvn clean install
+
+Then add this to your project's POM (or gradle, or whatever):
+
+    <dependency>
+        <groupId>com.barneyb.jpixelclient</groupId>
+        <artifactId>raw</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </dependency>
+
+You'll also need a binary of Josh's pixel server for your platform. Start it up,
+and you can then use these bindings to throw scenes at it. All the layers have
+an `XxxView` type with three constructors:
 
 1.  `XxxView()` connects to `localhost:8080` (the default)
 1.  `XxxView(String,int)` connects to the host and port specified
@@ -13,7 +28,7 @@ Regardless of how a viewer is constructed, or what layer it comes from, they all
 behave about the same: a `view` method which accepts the scene you want to view
 in a specific format, and sends it over to the pixel server.
 
-## Raw JSON Layer
+## JSON Layer (`json`)
 
 The simplest binding is in the `json` module, and simply POSTs a JSON string to
 the pixel server:
@@ -31,12 +46,11 @@ In addition to the `view(String)` method, `stream(Consumer<Writer>)` is also
 provided if you wish to dodge the cost of building a potentially-large throwaway
 String.
 
-## Scene Layer
+## Scene Layer (`raw`)
 
 The next layer is a port of the pixel server's viewer model to Java, including
 Jackson 2 bindings to allow building scenes in memory. Prepare a `Scene` and
 send it over:
-
 
     Scene scene = new Scene();
     scene.setBase(new Frame(
