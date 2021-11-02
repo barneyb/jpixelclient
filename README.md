@@ -1,5 +1,10 @@
 # jpixelclient
+
 Java bindings for http://github.com/frankamp/go-pixel-server in multiple layers.
+
+> ***NB:*** `go-pixel-server` no longer compiles, as its dependencies have moved
+> to far forward. So this library's pretty useless unless you happen to have old
+> binaries stashed away. Whee!
 
 You'll need Maven and a JDK to build, a JRE to run. Of course. I've used Maven
 3.3 and 3.6 along with JDK 1.8 and 11. Others will probably work. To start:
